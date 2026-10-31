@@ -195,6 +195,9 @@ namespace OpenTabletDriver.Desktop.ViewModels.Utility
         /// <returns></returns>
         public Statistic SaveButtons(bool[] buttons, int expectedButtons)
         {
+            // don't read past the end of the report if it has less buttons than expected
+            expectedButtons = Math.Min(expectedButtons, buttons.Length);
+
             // no buttons expected, don't log anything
             if (expectedButtons == 0) return this;
 

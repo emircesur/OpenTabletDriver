@@ -142,9 +142,9 @@ public sealed class TabletDebuggerViewModel : ViewModel, IDisposable
 
             if (dataObject is IWheelButtonReport wheelButtonReport)
                 for (int i = 0; i < wheelButtonReport.WheelButtons.Length; i++)
-                    AdditionalStatistics["Wheel Buttons"].
+                    AdditionalStatistics[$"Wheel {i} Buttons"].
                         SaveButtons(wheelButtonReport.WheelButtons[i],
-                            (int)(value.Tablet.Properties.Specifications.Wheels?[i].ButtonCount ?? 0));
+                            (int)(value.Tablet.Properties.Specifications.Wheels?.ElementAtOrDefault(i)?.ButtonCount ?? 0));
 
             if (dataObject is IDeviceReport deviceReport)
             {
@@ -176,7 +176,7 @@ public sealed class TabletDebuggerViewModel : ViewModel, IDisposable
         init => RaiseAndSetIfChanged(ref _additionalStatistics, value);
     }
 
-    private double ReportRateAverage => 1000 / (_reportRates.Count > 0 ? _reportRates.Average() : 0);
+    private double ReportRateAverage => _reportRates.Count > 0 ? 1000 / _reportRates.Average() : 0;
     public string ReportRateString => $"{ReportRateAverage:0.00}";
 
     private IDeviceReport? _deviceReport;
@@ -241,6 +241,9 @@ public sealed class TabletDebuggerViewModel : ViewModel, IDisposable
         [UsedImplicitly]
         set
         {
+            if (_dataRecordingEnabled == value)
+                return;
+
             RaiseAndSetIfChanged(ref _dataRecordingEnabled, value);
 
             if (value)

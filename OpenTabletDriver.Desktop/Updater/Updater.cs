@@ -135,7 +135,7 @@ namespace OpenTabletDriver.Desktop.Updater
 
         private Rollback CreateRollback()
         {
-            string timestamp = DateTime.UtcNow.ToString("-yyyy-MM-dd_hh-mm-ss");
+            string timestamp = DateTime.UtcNow.ToString("-yyyy-MM-dd_HH-mm-ss");
             var rollback = Path.Join(RollbackDirectory, CurrentVersion + timestamp);
             var binaryRollback = Path.Join(rollback, "bin");
             var appDataRollback = Path.Join(rollback, "appdata");
