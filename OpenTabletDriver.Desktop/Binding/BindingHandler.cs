@@ -127,6 +127,10 @@ namespace OpenTabletDriver.Desktop.Binding
 
         private void HandleOutOfRangeReport(TabletReference tablet, IDeviceReport report)
         {
+            // the pen can't be touching the tablet while out of range, so make sure the tip/eraser are released
+            Tip?.Invoke(tablet, report, 0f);
+            Eraser?.Invoke(tablet, report, 0f);
+
             for (var i = 0; i < PenButtons.Count; i++)
             {
                 if (PenButtons.TryGetValue(i, out var binding))
