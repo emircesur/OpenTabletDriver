@@ -27,11 +27,20 @@ namespace OpenTabletDriver.Console
             await Driver.Instance!.SetSettings(settings);
         }
 
-        static async Task ModifySettings(Action<Settings> func)
+        static async Task ModifySettings(Func<Settings, Task> func)
         {
             var settings = await GetSettings();
-            func.Invoke(settings);
+            await func.Invoke(settings);
             await ApplySettings(settings);
+        }
+
+        static Task ModifySettings(Action<Settings> func)
+        {
+            return ModifySettings(s =>
+            {
+                func.Invoke(s);
+                return Task.CompletedTask;
+            });
         }
 
         static async Task ModifyProfile(string profileName, Action<Profile> func)
