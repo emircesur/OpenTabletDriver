@@ -49,6 +49,10 @@ namespace OpenTabletDriver.Console
             {
                 var profile = await GetProfile(profileName, s);
                 func.Invoke(profile);
+
+                // profiles generated from defaults are not part of the settings yet
+                if (!s.Profiles.Contains(profile))
+                    s.Profiles.Add(profile);
             });
         }
 
